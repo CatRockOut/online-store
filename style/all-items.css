@@ -1,0 +1,223 @@
+@import url('./_reset.css');
+@import url('./_vars.css');
+@import url('./common.css');
+
+
+/* ALL ITEMS
+-------------------------------------- */
+.all-items {
+    margin-bottom: 110px;
+}
+
+.all-items .container {
+    display: flex;
+    justify-content: center;
+}
+
+.all-items__fox {
+    display: grid;
+    grid-template-columns: repeat(2, 2fr);
+    gap: 40px 60px;
+}
+
+/* ITEM */
+.item-fox {
+    max-width: 431px;
+    position: relative;
+}
+
+.item-fox img {
+    max-width: 421px;
+    border-radius: 10px;
+    margin-bottom: 7px;
+}
+
+.item-fox__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-fox__info span {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: calc(20 / 30);
+    letter-spacing: 1px;
+}
+
+.item-fox__info p {
+    display: inline-block;
+    color: var(--gray-opacity);
+    font-size: 16px;
+    line-height: calc(16 / 24);
+    letter-spacing: .8px;
+}
+
+.add-to-cart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(-30%, 30%);
+    width: 55px;
+    height: 55px;
+    background-color: var(--orange);
+    color: var(--white);
+    border: none;
+    cursor: pointer;
+    transition: background-color, .2s ease, color .2s ease;
+}
+
+.add-to-cart:hover {
+    background-color: var(--white);
+    color: var(--orange);
+}
+
+.add-to-cart span {
+    margin: 0;
+}
+
+.add-to-cart span:first-child {
+    width: 20px;
+    height: 21px;
+    font-size: 33px;
+    font-weight: 600;
+    line-height: calc(33 / 49.5);
+    letter-spacing: 1.65px;
+}
+
+.add-to-cart span:last-child {
+    font-size: 11px;
+    font-weight: 400;
+    line-height: calc(11 / 16.5);
+    letter-spacing: .55px;
+}
+
+.rating__container {
+    display: inline-flex;
+    flex-direction: row-reverse;
+}
+
+.rating__container input[type="radio"] {
+    display: none;
+}
+
+.rating__container label {
+    width: 15px;
+    height: 15px;
+    background-image: url('../img/star-white.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
+    transition: background-image .2s ease;
+}
+
+.rating__container label:not(:last-child) {
+    margin-left: 2px;
+}
+
+.rating__container label:hover,
+.rating__container label:hover ~ label,
+.rating__container input[type="radio"]:checked ~ label {
+    background-image: url('../img/star-orange.svg');
+}
+
+.all-foxes__btn {
+    display: block;
+    background-color: var(--orange);
+    max-width: 598px;
+    width: 100%;
+    padding: 25px 10px;
+    margin: 0 auto;
+    border: none;
+    cursor: pointer;
+    transition: box-shadow .2s ease;
+}
+
+.all-foxes__btn:hover {
+    box-shadow: 0 0 15px rgb(0, 0, 0);
+}
+
+.all-foxes__btn span {
+    color: var(--white);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: calc(20 / 30);
+}
+
+
+/* MEDIA
+-------------------------------------- */
+@media (max-width: 1280px) {
+    .all-items .container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 1024px) {
+    .all-items {
+        margin-bottom: 100px;
+    }
+
+    .all-items__fox {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .item-fox {
+        max-width: none;
+    }
+
+    .item-fox img {
+        max-width: none;
+        width: 85vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .all-items {
+        margin-bottom: 20px;
+    }
+
+    .all-items__fox {
+        margin-bottom: 40px;
+    }
+
+    .item-fox {
+        width: 91vw;
+    }
+
+    .item-fox img {
+        width: 91vw;
+    }
+
+    .item-fox__info {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        justify-items: center;
+        gap: 10px;
+    }
+
+    .item-fox__info span,
+    .item-fox__info p {
+        font-size: 16px;
+    }
+
+    .add-to-cart {
+        width: 46px;
+        height: 46px;
+    }
+
+    .rating__container {
+        margin-right: 20px;
+    }
+
+    .rating__container label {
+        width: 12px;
+        height: 12px;
+    }
+}
