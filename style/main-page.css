@@ -11,18 +11,17 @@ header {
     background: rgba(0, 0, 0, .45);
 }
 
-header h3 span {
+header h1 span {
     color: var(--white);
 }
 
-header h3 span:first-child:hover {
+header h1 span:first-child:hover {
     color: var(--orange);
 }
 
-header h3 span:last-child {
+header h1 span:last-child {
     color: var(--black);
     background-color: var(--white);
-    max-height: 19px;
 }
 
 header nav span {
@@ -288,7 +287,7 @@ header nav span {
         padding: 0;
     }
 
-    header h3 {
+    header h1 {
         margin: 0 auto;
     }
 

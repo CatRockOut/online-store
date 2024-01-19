@@ -1,3 +1,8 @@
+.body-lock {
+    overflow: hidden;
+}
+
+
 /* HEADER
 -------------------------------------- */
 header {
@@ -12,24 +17,24 @@ header .container {
     width: 100%;
 }
 
-header h3 a {
+header h1 a {
     display: flex;
-    height: 19px;
 }
 
-header h3 span {
+header h1 span {
     color: var(--orange);
     transition: color .2s ease;
+    font-size: 22px;
+    height: 23px;
 }
 
-header h3 span:first-child:hover {
+header h1 span:first-child:hover {
     color: var(--black);
 }
 
-header h3 span:last-child {
+header h1 span:last-child {
     color: var(--black);
     background-color: var(--white);
-    max-height: 19px;
 }
 
 header nav ul {
@@ -240,13 +245,29 @@ li a span.active-link {
     max-width: 1920px;
 }
 
+.breadcrumbs {
+    display: flex;
+    margin-bottom: 35px;
+}
+
+.breadcrumbs li + li:before {
+    content: '\002F';
+    display: inline-block;
+    color: var(--gray-opacity);
+    margin-left: 3px;
+}
+
+.breadcrumbs li a span:hover {
+    color: var(--gray-opacity);
+    text-decoration: underline;
+}
+
 .gray-title span {
     color: var(--gray-opacity);
     font-size: 15px;
     font-weight: 600;
     line-height: calc(15 / 22.5);
     letter-spacing: .75px;
-    margin-bottom: 35px;
 }
 
 .gray-title h1 {
@@ -537,28 +558,32 @@ footer .container {
     max-width: 276px;
 }
 
-.footer__logo h3 a {
+.footer__logo h1 a {
     display: flex;
-    height: 19px;
     margin-bottom: 19px;
 }
 
-.footer__logo h3 a span {
+.footer__logo h1 a span {
     color: var(--orange);
     transition: color .2s ease;
+    font-size: 22px;
 }
 
-.footer__logo h3 a span:last-child {
+.footer__logo h1 a span:last-child {
     color: var(--white);
 }
 
-.footer__logo h3 a span:first-child:hover {
+.footer__logo h1 a span:first-child:hover {
     color: var(--white);
 }
 
 .footer__logo span {
     display: block;
     margin-bottom: 15px;
+}
+
+.footer__logo span a {
+    color: var(--white);
 }
 
 .footer__social-media {
@@ -681,11 +706,11 @@ footer li span:hover {
         background: rgba(0, 0, 0, .45);
     }
 
-    header h3 span {
+    header h1 span {
         color: var(--white);
     }
 
-    header h3 span:last-child {
+    header h1 span:last-child {
         color: rgba(0, 0, 0, .45);
     }
 

@@ -19,7 +19,7 @@ function initShopFilter() {
 
     const itemsFoxesContainer = document.querySelector('.all-items__fox');
     const priceRange = document.querySelector('.price');
-    const allItemsButton = document.querySelector('.all-foxes__btn');
+    const mainClass = '.item-fox';
 
     // ==> INPUT <==
     searchInput && searchInput.addEventListener('input', () => {
@@ -59,21 +59,6 @@ function initShopFilter() {
                 searchItemsViaFilter(json, category);
             }
 
-            // Reset all filters, input text and range, but display all items when press the "All foxes" button:
-            allItemsButton.addEventListener('click', () => {
-                const filterButtonAll = document.querySelector('.all-items__filter [data-category="All"]');
-
-                filterButton.classList.remove('active');
-                filterButtonAll.classList.add('active');
-
-                searchItemsViaFilter(json, 'All');
-                notifyIfItemsNotFound();
-
-                searchInput.value = ''
-                inputRange.value = 120;
-                priceRange.textContent = 'Value: $' + inputRange.value;
-            });
-
             applyAllFilters(category);
         });
     });
@@ -91,8 +76,8 @@ function initShopFilter() {
         itemsFoxesContainer.innerHTML = '';
 
         const filteredItems = json.filter((item) => {
-            const itemNameMatches = item.itemName.toLowerCase().startsWith(searchInputValue);
-            const itemCategoryMatches = item.itemCategory.toLowerCase().startsWith(searchInputValue);
+            const itemNameMatches = item.itemName.toLowerCase().includes(searchInputValue);
+            const itemCategoryMatches = item.itemCategory.toLowerCase().includes(searchInputValue);
             const itemMatchesFilter = category === 'All' || item.itemCategory === category;
 
             const matchesNameOrCategory = itemNameMatches || itemCategoryMatches;
@@ -121,11 +106,11 @@ function initShopFilter() {
     function searchItemsViaRange(json) {
         const filteredItems = json.filter((item) => {
             const activeFilter = document.querySelector('.all-items__filter .active');
-            let maxPrice = parseInt(inputRange.value);
-            let minPrice = 0;
+            const maxPrice = parseInt(inputRange.value);
+            const minPrice = 0;
 
-            const itemNameMatches = item.itemName.toLowerCase().startsWith(searchInput.value.toLowerCase());
-            const itemCategoryMatches = item.itemCategory.toLowerCase().startsWith(searchInput.value.toLowerCase());
+            const itemNameMatches = item.itemName.toLowerCase().includes(searchInput.value.toLowerCase());
+            const itemCategoryMatches = item.itemCategory.toLowerCase().includes(searchInput.value.toLowerCase());
             const itemMatchesFilter = activeFilter
                 ? activeFilter.getAttribute('data-category') === 'All' || item.itemCategory === activeFilter.getAttribute('data-category')
                 : true;
@@ -158,7 +143,7 @@ function initShopFilter() {
     function notifyIfItemsNotFound() {
         const notificationItemsContainer = document.querySelector('.notification__items-container');
 
-        if (!itemsFoxesContainer.querySelector('.item-fox')) {
+        if (!itemsFoxesContainer.querySelector(`${mainClass}`)) {
             notificationItemsContainer.classList.remove('hidden');
         } else {
             notificationItemsContainer.classList.add('hidden');
