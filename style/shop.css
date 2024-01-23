@@ -1,7 +1,7 @@
-@import url('/style/reset.css');
-@import url('/style/vars.css');
-@import url('/style/common.css');
-@import url('/style/all-items.css');
+@import url('./reset.css');
+@import url('./vars.css');
+@import url('./common.css');
+@import url('./all-items.css');
 
 
 /* ALL ITEMS
