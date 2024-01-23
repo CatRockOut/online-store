@@ -1,6 +1,8 @@
+import { amountMoneyAllItemsInBag, setCookie } from "./utils.js";
+
 // Manipulate the bag on all pages:
 function initBag() {
-    const mainClass = '.item-fox';
+    const mainClass = 'item-fox';
     const bag = document.querySelector('.bag');
     const btnCart = document.querySelector('.cart');
     const addedItems = document.querySelector('.added-items');
@@ -48,7 +50,7 @@ function initBag() {
 
     // Deleting a specific item from the bag and cookie by clicking 'Remove' button:
     function handleRemoveItem(removeBtn) {
-        const item = removeBtn.closest(`${mainClass}`);
+        const item = removeBtn.closest(`.${mainClass}`);
         const imgSrc = item.querySelector('img').src;
         const cookieValue = encodeURIComponent(imgSrc);
         const cookieName = `item-${cookieValue}`;
@@ -57,12 +59,12 @@ function initBag() {
         item.remove();
 
         // Notification about an empty bag inside the bag:
-        if (!addedItems.querySelector(`${mainClass}`)) {
+        if (!addedItems.querySelector(`.${mainClass}`)) {
             const notificationEmptyBag = addedItems.querySelector('.notification__empty-bag');
             notificationEmptyBag.classList.remove('hidden');
         }
 
-        amountMoneyAllItemsInBag();
+        amountMoneyAllItemsInBag(addedItems, mainClass);
     }
 
     // Plus one item in the bag when you click on "+" button:
@@ -74,12 +76,12 @@ function initBag() {
         counter.textContent = currentValue;
 
         amountMoneyItemInBag(plusBtn, null);
-        setCookie(plusBtn, currentValue);
+        setCookie(plusBtn, currentValue, mainClass);
     }
 
     // Minus one item in the bag when you click on "-" button:
     function handleMinusItem(minusBtn) {
-        const itemFox = minusBtn.closest(`${mainClass}`);
+        const itemFox = minusBtn.closest(`.${mainClass}`);
         const counter = minusBtn.parentElement.querySelector('.counter h3');
 
         let currentValue = parseInt(counter.textContent, 10);
@@ -90,55 +92,38 @@ function initBag() {
             amountMoneyItemInBag(null, minusBtn);
         }
 
-        setCookie(minusBtn, currentValue);
+        setCookie(minusBtn, currentValue, mainClass);
 
         if (currentValue === 0) {
             const confirmation = confirm('Are you sure you want to remove this item from the bag?');
 
             // Ask the user in the bag whether to delete an item when clicking on "-" when there is only 1 item left:
             if (confirmation) {
-                const imgSrc = minusBtn.closest(`${mainClass}`).querySelector('img').src;
+                const imgSrc = minusBtn.closest(`.${mainClass}`).querySelector('img').src;
                 const cookieValue = encodeURIComponent(imgSrc);
                 const cookieName = `item-${cookieValue}`;
 
                 document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;`;
                 itemFox.remove();
-                amountMoneyAllItemsInBag();
+                amountMoneyAllItemsInBag(addedItems, mainClass);
 
-                if (!addedItems.querySelector(`${mainClass}`)) {
+                if (!addedItems.querySelector(`.${mainClass}`)) {
                     const notificationEmptyBag = addedItems.querySelector('.notification__empty-bag');
                     notificationEmptyBag.classList.remove('hidden');
                 }
             } else {
                 currentValue = 1;
                 counter.textContent = currentValue;
+
+                setCookie(minusBtn, currentValue, mainClass);
             }
         }
-    }
-
-    // Function to update cookies:
-    function setCookie(currentButton, currentValue) {
-        const imgSrc = currentButton.closest(`${mainClass}`).querySelector('img').src;
-        const itemFox = currentButton.closest(`${mainClass}`);
-        const itemName = itemFox.querySelector(`${mainClass}__info span`).textContent;
-        const amountMoney = itemFox.querySelector(`${mainClass}__amount`);
-        const initialAmount = parseFloat(amountMoney.getAttribute('data-initial-amount').replace(/[^\d.]/g, ''));
-        
-        const cookieValue = encodeURIComponent(imgSrc);
-        const cookieName = `item-${cookieValue}`;
-        const amountMoneyForCookie = amountMoney.textContent.replace(/[^\d.]/g, '');
-
-        const date = new Date();
-        date.setHours(date.getHours() + 2);
-
-        const cookieString = `${cookieName}=${cookieValue}=${currentValue}=${amountMoneyForCookie}=${initialAmount}=${itemName}; expires=${date}; path=/`;
-        document.cookie = cookieString;
     }
 
     // Display the number of all items in the bag:
     function countAllItemsInTheBag() {
         const cartCount = document.querySelector('.cart-count');
-        const itemCount = addedItems.querySelectorAll(`${mainClass}`).length;
+        const itemCount = addedItems.querySelectorAll(`.${mainClass}`).length;
 
         if (itemCount > 0) {
             cartCount.classList.remove('hidden');
@@ -151,9 +136,9 @@ function initBag() {
     // Amount of money per item in the bag:
     function amountMoneyItemInBag(plusBtn, minusBtn) {
         const itemFox = plusBtn
-            ? plusBtn.closest(`${mainClass}`)
-            : minusBtn.closest(`${mainClass}`);
-        const amountMoney = itemFox.querySelector(`${mainClass}__amount`);
+            ? plusBtn.closest(`.${mainClass}`)
+            : minusBtn.closest(`.${mainClass}`);
+        const amountMoney = itemFox.querySelector(`.${mainClass}__amount`);
         const initialAmount = parseFloat(amountMoney.getAttribute('data-initial-amount').replace(/[^\d.]/g, ''));
         const pricePerItem = parseFloat(amountMoney.textContent.replace(/[^\d.]/g, ''));
 
@@ -167,32 +152,16 @@ function initBag() {
             amountMoney.textContent = `$${totalAmount.toFixed(2)}`;
         }
 
-        amountMoneyAllItemsInBag();
-    }
-
-    // Amount of money of all items in the bag:
-    function amountMoneyAllItemsInBag() {
-        const totalCheckout = document.querySelector('.checkout h2');
-        const itemsFoxes = addedItems.querySelectorAll(`${mainClass}`);
-        let totalAmountAllItems = 0;
-
-        itemsFoxes.forEach((itemFox) => {
-            const amountMoney = itemFox.querySelector(`${mainClass}__amount`).textContent;
-            const pricePerItem = parseFloat(amountMoney.replace(/[^\d.]/g, ''));
-
-            totalAmountAllItems += pricePerItem;
-        });
-
-        totalCheckout.textContent = `Total: $${totalAmountAllItems.toFixed(2)}`;
+        amountMoneyAllItemsInBag(addedItems, mainClass);
     }
 
     // Notification about order processing when you click on the "Checkout" button in the bag:
     checkoutBtn && checkoutBtn.addEventListener('click', () => {
-        if (addedItems.querySelector(`${mainClass}`)) {
+        if (addedItems.querySelector(`.${mainClass}`)) {
             alert('Thank you for your order, our manager will contact you shortly!');
         }
 
-        if (!addedItems.querySelector(`${mainClass}`)) {
+        if (!addedItems.querySelector(`.${mainClass}`)) {
             alert('The order cannot be processed while the bag is empty...');
         }
     });
@@ -206,12 +175,12 @@ function initBag() {
 
         if (cookieName.trim() !== '') {
             addedItems.insertAdjacentHTML('beforeend', `
-                <div class="item-fox">
-                    <div class="item-fox__inner">
+                <div class="${mainClass}">
+                    <div class="${mainClass}__inner">
                         <img src="${imgSrc}" alt="fox">
-                        <div class="item-fox__info">
+                        <div class="${mainClass}__info">
                             <span>${cookieItemName}</span>
-                            <span class="item-fox__amount" data-initial-amount=${cookieInitialAmount}>$${cookieAmountMoney}</span>
+                            <span class="${mainClass}__amount" data-initial-amount=${cookieInitialAmount}>$${cookieAmountMoney}</span>
                         </div>
                     </div>
                     <div class="addition-counter">
@@ -236,7 +205,7 @@ function initBag() {
     });
 
     countAllItemsInTheBag();
-    amountMoneyAllItemsInBag();
+    amountMoneyAllItemsInBag(addedItems, mainClass);
 }
 
 document.addEventListener('DOMContentLoaded', initBag);

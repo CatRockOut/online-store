@@ -1,8 +1,9 @@
 import { json } from "./json.js";
+import { htmlTemplate, amountMoneyAllItemsInBag, setCookie } from "./utils.js";
 
 // Manipulate with items on the page:
 function initAllItems() {
-    const mainClass = '.item-fox';
+    const mainClass = 'item-fox';
     const itemsFoxesContainer = document.querySelector('.all-items__fox');
     const addedItems = document.querySelector('.added-items');
 
@@ -12,9 +13,9 @@ function initAllItems() {
 
         // Manipulations with item when click on the "Add" button inside the item bag on the page:
         if (addButton) {
-            const itemContainer = addButton.closest(`${mainClass}`);
+            const itemContainer = addButton.closest(`.${mainClass}`);
             const imgSrc = itemContainer.querySelector('img').src;
-            const existingItem = addedItems.querySelector(`${mainClass} img[src="${imgSrc}"]`);
+            const existingItem = addedItems.querySelector(`.${mainClass} img[src="${imgSrc}"]`);
 
             if (existingItem) {
                 // If the item exists, then change the counter on one specific item in the bag (instead of creating a new one):
@@ -26,7 +27,7 @@ function initAllItems() {
         }
 
         // Notify if items are not found in the page:
-        if (!itemsFoxesContainer.querySelector(`${mainClass}`)) {
+        if (!itemsFoxesContainer.querySelector(`.${mainClass}`)) {
             notificationItemsContainer.classList.remove('hidden');
         } else {
             notificationItemsContainer.classList.add('hidden');
@@ -35,10 +36,10 @@ function initAllItems() {
 
     // When adding an item in the bag, but if a specific item is already in the bag, then increase the counter in this added item (instead of creating the same item):
     function increaseCounter(button, existingItem) {
-        const itemContainer = button.closest(`${mainClass}`);
-        const counter = existingItem.closest(`${mainClass}`).querySelector('.counter h3');
-        const itemFox = existingItem.closest(`${mainClass}`);
-        const amountMoney = itemFox.querySelector(`${mainClass}__amount`);
+        const itemContainer = button.closest(`.${mainClass}`);
+        const counter = existingItem.closest(`.${mainClass}`).querySelector('.counter h3');
+        const itemFox = existingItem.closest(`.${mainClass}`);
+        const amountMoney = itemFox.querySelector(`.${mainClass}__amount`);
         const initialAmount = parseFloat(amountMoney.getAttribute('data-initial-amount').replace(/[^\d.]/g, ''));
         const pricePerItem = parseFloat(amountMoney.textContent.replace(/[^\d.]/g, ''));
 
@@ -51,30 +52,30 @@ function initAllItems() {
         const totalAmount = pricePerItem + initialAmount;
         amountMoney.textContent = `$${totalAmount.toFixed(2)}`;
 
-        setCookie(existingItem, currentValue);
-        amountMoneyAllItemsInBag();
+        setCookie(existingItem, currentValue, mainClass);
+        amountMoneyAllItemsInBag(addedItems, mainClass);
         countAllItemsInTheBag();
         notificationInsideItem(itemContainer);
     }
 
     // When adding an item in the bag and if the item is not in the bag, then create a new item:
     function createNewElement(button) {
-        const itemContainer = button.closest(`${mainClass}`);
+        const itemContainer = button.closest(`.${mainClass}`);
         const imgSrc = itemContainer.querySelector('img').src;
-        const itemName = itemContainer.querySelector(`${mainClass}__info span`).textContent;
-        const itemPrice = itemContainer.querySelector(`${mainClass}__info span:nth-child(2)`).textContent.replace(/[^\d.]/g, '');
+        const itemName = itemContainer.querySelector(`.${mainClass}__info span`).textContent;
+        const itemPrice = itemContainer.querySelector(`.${mainClass}__info span:nth-child(2)`).textContent.replace(/[^\d.]/g, '');
         const notificationEmptyBag = document.querySelector('.notification__empty-bag');
         const currentValue = 1;
 
         notificationEmptyBag.classList.add('hidden');
 
         addedItems.insertAdjacentHTML('beforeend', `
-            <div class="item-fox">
-                <div class="item-fox__inner">
+            <div class="${mainClass}">
+                <div class="${mainClass}__inner">
                     <img src="${imgSrc}" alt="fox">
-                    <div class="item-fox__info">
+                    <div class="${mainClass}__info">
                         <span>${itemName}</span>
-                        <span class="item-fox__amount" data-initial-amount=${itemPrice}>$${itemPrice}</span>
+                        <span class="${mainClass}__amount" data-initial-amount=${itemPrice}>$${itemPrice}</span>
                     </div>
                 </div>
                 <div class="addition-counter">
@@ -93,35 +94,16 @@ function initAllItems() {
             </div>
         `);
 
-        setCookie(itemContainer, currentValue);
-        amountMoneyAllItemsInBag();
+        setCookie(itemContainer, currentValue, mainClass);
+        amountMoneyAllItemsInBag(addedItems, mainClass);
         countAllItemsInTheBag();
         notificationInsideItem(itemContainer);
-    }
-
-    // Function to update cookies:
-    function setCookie(currentButton, currentValue) {
-        const imgSrc = currentButton.closest(`${mainClass}`).querySelector('img').src;
-        const itemFox = currentButton.closest(`${mainClass}`);
-        const itemName = itemFox.querySelector(`${mainClass}__info span`).textContent;
-        const amountMoney = itemFox.querySelector(`${mainClass}__amount`);
-        const initialAmount = parseFloat(amountMoney.getAttribute('data-initial-amount').replace(/[^\d.]/g, ''));
-
-        const cookieValue = encodeURIComponent(imgSrc);
-        const cookieName = `item-${cookieValue}`;
-        const amountMoneyForCookie = amountMoney.textContent.replace(/[^\d.]/g, '');
-
-        const date = new Date();
-        date.setHours(date.getHours() + 2);
-
-        const cookieString = `${cookieName}=${cookieValue}=${currentValue}=${amountMoneyForCookie}=${initialAmount}=${itemName}; expires=${date}; path=/`;
-        document.cookie = cookieString;
     }
 
     // Updating the number of items in the bag in Header by clicking 'Add' button:
     function countAllItemsInTheBag() {
         const cartCount = document.querySelector('.cart-count');
-        const itemCount = addedItems.querySelectorAll(`${mainClass}`).length;
+        const itemCount = addedItems.querySelectorAll(`.${mainClass}`).length;
 
         if (itemCount > 0) {
             cartCount.classList.remove('hidden');
@@ -139,56 +121,8 @@ function initAllItems() {
         }, 2000);
     }
 
-    // Calculate the total amount of money of all items in the cart:
-    function amountMoneyAllItemsInBag() {
-        const totalCheckout = document.querySelector('.checkout h2');
-        const itemsFoxes = addedItems.querySelectorAll(`${mainClass}`);
-        let totalAmountAllItems = 0;
-
-        itemsFoxes.forEach((itemFox) => {
-            const amountMoney = itemFox.querySelector(`${mainClass}__amount`).textContent;
-            const pricePerItem = parseFloat(amountMoney.replace(/[^\d.]/g, ''));
-
-            totalAmountAllItems += pricePerItem;
-        });
-
-        totalCheckout.textContent = `Total: $${totalAmountAllItems.toFixed(2)}`;
-    }
-
     // Display all items on the page when DOMContentLoaded:
-    const htmlTemplate = (item) => {
-        return `
-            <div class="item-fox">
-                <span class="notification hidden">
-                    Product added to the cart!
-                </span>
-                <img src="${item.imgSrc}" alt="fox">
-                <div class="add-to-cart">
-                    <span>+</span>
-                    <span>Add</span>
-                </div>
-                <div class="item-fox__info">
-                    <span>${item.itemName}</span>
-                    <span class="item-fox__amount" data-initial-amount=${item.itemPrice}>&#36;${item.itemPrice}</span>
-                    <div class="rating__container">
-                        <input type="radio" id="star${item.itemRating}-1" name="rating${item.itemRating}-1" />
-                        <label for="star${item.itemRating}-1"></label>
-                        <input type="radio" id="star${item.itemRating}-2" name="rating${item.itemRating}-2" />
-                        <label for="star${item.itemRating}-2"></label>
-                        <input type="radio" id="star${item.itemRating}-3" name="rating${item.itemRating}-3" />
-                        <label for="star${item.itemRating}-3"></label>
-                        <input type="radio" id="star${item.itemRating}-4" name="rating${item.itemRating}-4" />
-                        <label for="star${item.itemRating}-4"></label>
-                        <input type="radio" id="star${item.itemRating}-5" name="rating${item.itemRating}-5" />
-                        <label for="star${item.itemRating}-5"></label>
-                    </div>
-                    <p>${item.itemCategory}</p>
-                </div>
-            </div>
-        `;
-    };
-
-    const allItemsHtml = json.map(htmlTemplate).join('');
+    const allItemsHtml = json.map((item) => htmlTemplate(item, mainClass)).join('');
     itemsFoxesContainer.insertAdjacentHTML('beforeend', allItemsHtml);
 }
 

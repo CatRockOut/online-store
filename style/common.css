@@ -118,11 +118,7 @@ li a span.active-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    z-index: 5;
-    top: 0;
-    left: 0;
-    transform: translate(80%, 140%);
+    transform: translate(50%, 100%);
     width: 26px;
     height: 26px;
     border-radius: 5px;
@@ -160,9 +156,6 @@ li a span.active-link {
     display: flex;
     flex-direction: column;
     text-align: center;
-    position: absolute;
-    z-index: 5;
-    top: -100%;
     width: 100%;
     padding: 100px 0;
     background: rgba(0, 0, 0, .75);
@@ -188,21 +181,21 @@ li a span.active-link {
 }
 
 #burger-menu__toggle {
-    opacity: 0;
+    display: none;
 }
 
 #burger-menu__toggle:checked ~ .burger-menu__btn {
+    display: flex;
     position: absolute;
-    z-index: 10;
     bottom: 0;
     left: 50%;
-    transform: translate(-100%, 21em);
+    transform: translate(-60%, -100%);
 }
 
 #burger-menu__toggle:checked ~ .burger-menu__btn > span,
 #burger-menu__toggle:checked ~ .burger-menu__btn > span::before,
 #burger-menu__toggle:checked ~ .burger-menu__btn > span::after {
-    width: 100%;
+    width: 26px;
     height: 2px;
     border-radius: 0;
 }
@@ -703,7 +696,14 @@ footer li span:hover {
 
 @media (max-width: 768px) {
     header {
+        display: flex;
+        align-items: center;
+        max-height: 37px;
         background: rgba(0, 0, 0, .45);
+    }
+
+    header h1 {
+        margin: 0 auto;
     }
 
     header h1 span {
@@ -731,8 +731,13 @@ footer li span:hover {
     }
 
     .mobile__burger-menu  {
-        display: block;
-        width: 26px;
+        display: flex;
+        width: 100%;
+        position: absolute;
+        z-index: 5;
+        top: 0;
+        left: 0;
+        transform: translate(0, 0);
     }
 
     .burger-menu__box span {
@@ -779,7 +784,6 @@ footer li span:hover {
 
 @media (max-width: 480px) {
     header {
-        display: flex;
         align-items: center;
         padding: 5px 0;
         height: 37px;
@@ -791,10 +795,6 @@ footer li span:hover {
 
     .burger-menu__btn {
         transform: translate(80%, 20%);
-    }
-
-    #burger-menu__toggle:checked ~ .burger-menu__btn {
-        transform: translate(-100%, 18em);
     }
 
     .burger-menu__box {

@@ -1,6 +1,6 @@
-@import url('./_reset.css');
-@import url('./_vars.css');
-@import url('./common.css');
+@import url('/style/reset.css');
+@import url('/style/vars.css');
+@import url('/style/common.css');
 
 
 /* HEADER
@@ -79,21 +79,8 @@ header nav span {
 }
 
 /* Burger menu for mobile */
-.burger-menu__btn {
-    transform: translate(50%, 100%);
-}
-
-.burger-menu__box {
-    padding: 80px 0;
-    height: 95%;
-}
-
 .burger-menu__box li {
     margin: 0;
-}
-
-#burger-menu__toggle:checked ~ .burger-menu__btn {
-    transform: translate(-60%, 21em);
 }
 
 
@@ -276,19 +263,9 @@ header nav span {
 }
 
 @media (max-width: 768px) {
-    header {
-        display: flex;
-        align-items: center;
-        max-height: 37px;
-    }
-
     header .container {
         justify-content: flex-end;
         padding: 0;
-    }
-
-    header h1 {
-        margin: 0 auto;
     }
 
     header .head-fox {
@@ -322,9 +299,9 @@ header nav span {
         max-width: 306px;
     }
 
-    .mobile__burger-menu  {
+    /* .mobile__burger-menu  {
         display: block;
-    }
+    } */
 
     .burger-menu__box span {
         font-size: 25px;
@@ -343,14 +320,6 @@ header nav span {
 @media (max-width: 480px) {
     header {
         padding: 5px 0;
-    }
-
-    .burger-menu__btn {
-        transform: translate(50%, 15%);
-    }
-
-    #burger-menu__toggle:checked ~ .burger-menu__btn {
-        transform: translate(-60%, 20em);
     }
 
     .intro h3 {

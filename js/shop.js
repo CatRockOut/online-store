@@ -1,25 +1,14 @@
 import { json } from "./json.js";
+import { htmlTemplate } from "./utils.js";
 
 // Filters manipulations:
 function initShopFilter() {
     const searchInput = document.querySelector('.filter__search');
-    if (!searchInput) {
-        return;
-    }
-
     const filterItemsButtons = document.querySelectorAll('.all-items__filter span');
-    if (!filterItemsButtons) {
-        return;
-    }
-
     const inputRange = document.getElementById('price-range');
-    if (!inputRange) {
-        return;
-    }
-
     const itemsFoxesContainer = document.querySelector('.all-items__fox');
     const priceRange = document.querySelector('.price');
-    const mainClass = '.item-fox';
+    const mainClass = 'item-fox';
 
     // ==> INPUT <==
     searchInput && searchInput.addEventListener('input', () => {
@@ -86,7 +75,7 @@ function initShopFilter() {
             return matchesNameOrCategory && matchesFilter;
         });
 
-        const itemTemplate = filteredItems.map(htmlTemplate).join('');
+        const itemTemplate = filteredItems.map((item) => htmlTemplate(item, mainClass)).join('');
         itemsFoxesContainer.insertAdjacentHTML('beforeend', itemTemplate);
     }
 
@@ -98,7 +87,7 @@ function initShopFilter() {
             return category === 'All' || item.itemCategory === category;
         });
 
-        const itemTemplate = filteredItems.map(htmlTemplate).join('');
+        const itemTemplate = filteredItems.map((item) => htmlTemplate(item, mainClass)).join('');
         itemsFoxesContainer.insertAdjacentHTML('beforeend', itemTemplate);
     }
 
@@ -124,7 +113,7 @@ function initShopFilter() {
 
         itemsFoxesContainer.innerHTML = '';
 
-        const itemTemplate = filteredItems.map(htmlTemplate).join('');
+        const itemTemplate = filteredItems.map((item) => htmlTemplate(item, mainClass)).join('');
         itemsFoxesContainer.insertAdjacentHTML('beforeend', itemTemplate);
     }
 
@@ -143,7 +132,7 @@ function initShopFilter() {
     function notifyIfItemsNotFound() {
         const notificationItemsContainer = document.querySelector('.notification__items-container');
 
-        if (!itemsFoxesContainer.querySelector(`${mainClass}`)) {
+        if (!itemsFoxesContainer.querySelector(`.${mainClass}`)) {
             notificationItemsContainer.classList.remove('hidden');
         } else {
             notificationItemsContainer.classList.add('hidden');
@@ -153,39 +142,6 @@ function initShopFilter() {
     // When DOMContentLoaded, the "All" button from the filter will be active color:
     const filterButton = document.querySelector('.all-items__filter [data-category="All"]');
     filterButton.classList.add('active');
-
-    // Template for displaying items when using the functions:
-    const htmlTemplate = (item) => {
-        return `
-            <div class="item-fox">
-                <span class="notification hidden">
-                    Product added to the cart!
-                </span>
-                <img src="${item.imgSrc}" alt="fox">
-                <div class="add-to-cart">
-                    <span>+</span>
-                    <span>Add</span>
-                </div>
-                <div class="item-fox__info">
-                    <span>${item.itemName}</span>
-                    <span>&#36;${item.itemPrice}</span>
-                    <div class="rating__container">
-                        <input type="radio" id="star${item.itemRating}-1" name="rating${item.itemRating}-1" />
-                        <label for="star${item.itemRating}-1"></label>
-                        <input type="radio" id="star${item.itemRating}-2" name="rating${item.itemRating}-2" />
-                        <label for="star${item.itemRating}-2"></label>
-                        <input type="radio" id="star${item.itemRating}-3" name="rating${item.itemRating}-3" />
-                        <label for="star${item.itemRating}-3"></label>
-                        <input type="radio" id="star${item.itemRating}-4" name="rating${item.itemRating}-4" />
-                        <label for="star${item.itemRating}-4"></label>
-                        <input type="radio" id="star${item.itemRating}-5" name="rating${item.itemRating}-5" />
-                        <label for="star${item.itemRating}-5"></label>
-                    </div>
-                    <p>${item.itemCategory}</p>
-                </div>
-            </div>
-        `;
-    };
 }
 
 document.addEventListener('DOMContentLoaded', initShopFilter);
